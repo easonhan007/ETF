@@ -7,12 +7,18 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style media="screen">
+      .main-title {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+    </style>
 
     <title>ETF</title>
   </head>
   <body>
     <div class="container">
-      <h3 class="text text-center">ETF接口测试平台</h3>
+      <h3 class="text text-center main-title">ETF接口测试平台</h3>
       <form action="/handle_get" method="post">
         <div class="form-group">
           <input type="text" name="url" id="url" placeholder="请输入URL" class="form-control" autofocus>
