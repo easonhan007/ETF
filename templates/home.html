@@ -21,7 +21,18 @@
       <h3 class="text text-center main-title">ETF接口测试平台</h3>
       <form action="/handle_get" method="post">
         <div class="form-group">
-          <input type="text" name="url" id="url" placeholder="请输入URL" class="form-control" autofocus>
+          {% if resp and resp['url'] %}
+          <input type="text" name="url" id="url" placeholder="请输入URL" class="form-control" autofocus value="{{resp['url']}}">
+          {% else %}
+            <input type="text" name="url" id="url" placeholder="请输入URL" class="form-control" autofocus>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {% if resp and resp['assertion'] %}
+            <input type="text" name="assert" id="assert" placeholder="请输入断言，比如obj['key1'] == 'value'" class="form-control" value="{{resp['assertion']}}">
+          {% else %}
+            <input type="text" name="assert" id="assert" placeholder="请输入断言，比如obj['key1'] == 'value'" class="form-control">
+          {% endif %}
         </div>
         <div class="form-group">
           <input type="submit" name="submit" value="确定" class="btn btn-primary">
@@ -29,12 +40,21 @@
       </form>
       <hr>
 
-      {% if resp %}
-        <p>接口地址: {{resp.url}}</p>
-        <p>状态码: {{resp.status_code}}</p>
+      {% if resp['success'] %}
+        {% if resp['assertion_success'] is not none %}
+          {% if resp['assertion_success'] %}
+            <p><strong class="text text-success">断言成功</strong></p>
+          {% else %}
+            <p><strong class="text text-danger">断言失败</strong></p>
+          {% endif %}
+          <p><code>{{resp['assertion']}}</code></p>
+          <hr>
+        {% endif %}
+        <p>接口地址: {{resp['url']}}</p>
+        <p>状态码: {{resp['status_code']}}</p>
         <hr>
         <p>Headers</p>
-        {% for key, value in resp.headers.items() %}
+        {% for key, value in resp['headers'].items() %}
           <p> <pre><code>{{key}}: {{value}}</code></pre> </p>
         {% endfor %}
 
@@ -42,11 +62,13 @@
         <p>Body</p>
         <pre>
           <code>
-            {{resp.text}}
+            {{resp['text']}}
           </code>
         </pre>
       {% else %}
-        <p>没有响应</p>
+        <p class="text text-danger">执行失败</p>
+        <p class="text text-danger">状态码: {{resp['status_code']}}</p>
+        <p class="text text-danger">响应: {{resp['text']}}</p>
       {% endif%}
     </div>
 
